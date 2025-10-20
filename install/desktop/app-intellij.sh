@@ -1,4 +1,5 @@
 #!/bin/bash
 
-snap install intellij-idea-community --classic
+sudo snap install intellij-idea-community --classic
 
+idea installPlugins com.junkfactory.tokyodark
