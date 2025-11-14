@@ -36,3 +36,9 @@ favorites_list="[${favorites_list%,}]"
 
 # Set the favorite apps
 gsettings set org.gnome.shell favorite-apps "$favorites_list"
+
+# Set dock to auto-hide
+gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+
+# Set dock to the right side
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'RIGHT'
