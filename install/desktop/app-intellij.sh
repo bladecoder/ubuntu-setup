@@ -2,4 +2,4 @@
 
 sudo snap install intellij-idea-community --classic
 
-idea installPlugins com.junkfactory.tokyodark
+intellij-idea-community installPlugins com.junkfactory.tokyodark
