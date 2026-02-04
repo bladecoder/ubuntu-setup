@@ -1,5 +1,5 @@
-source ~/.local/share/bash/shell
-source ~/.local/share/bash/aliases
-source ~/.local/share/bash/functions
-source ~/.local/share/bash/prompt
-source ~/.local/share/bash/init
+source $HOME/.local/share/bash/shell
+source $HOME/.local/share/bash/aliases
+source $HOME/.local/share/bash/functions
+source $HOME/.local/share/bash/prompt
+source $HOME/.local/share/bash/init

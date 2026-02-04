@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Omakub Blade** is an opinionated Ubuntu setup automation tool that transforms a fresh Ubuntu 25.10+ installation into a fully-configured development environment with a single command. It is a fork/variant of Basecamp's [Omakub](https://github.com/basecamp/omakub) project, customized by @bladecoder.
+**Ubuntu Setup** is an opinionated Ubuntu setup automation tool that transforms a fresh Ubuntu 25.10+ installation into a fully-configured development environment with a single command. It is a fork/variant of Basecamp's [Omakub](https://github.com/basecamp/omakub) project, customized by @bladecoder.
 
 **Philosophy**: Following the "omakase" (お任せ) approach - "I leave it up to you" - where a curated selection of tools and configurations is provided based on the maintainer's preferences and experience.
 
@@ -24,37 +24,47 @@
 ## Project Structure
 
 ```
-omakub-blade/
-├── boot.sh                    # Bootstrap script (downloads and runs installer)
-├── install.sh                 # Main installation orchestrator
-├── install/
+ubuntu-setup/
+├── bootstrap.sh               # Bootstrap script (downloads and runs setup)
+├── setup.sh                   # Main installation orchestrator
+├── scripts/
 │   ├── check-version.sh       # OS/architecture validation
 │   ├── required.sh            # Pre-installation requirements
 │   ├── identification.sh      # User identification setup
 │   ├── terminal.sh            # Terminal tools installation orchestrator
 │   ├── desktop.sh             # Desktop tools installation orchestrator
-│   ├── terminal/              # Terminal application installers
-│   │   ├── a-shell.sh         # Bash shell configuration (runs first)
-│   │   ├── docker.sh          # Docker and Docker Compose
-│   │   ├── app-*.sh           # Individual CLI applications
-│   │   ├── install-dev-languages.sh  # Programming languages via mise
-│   │   ├── set-*.sh           # System configurations
+│   ├── terminal/              # Terminal application installers (ordered by prefix)
+│   │   ├── 10_packages.sh     # Base CLI packages
+│   │   ├── 20_bash.sh         # Bash shell configuration
+│   │   ├── 20_docker.sh       # Docker and Docker Compose
+│   │   ├── 30_install-dev-languages.sh  # Programming languages via mise
+│   │   ├── 40_android-sdk.sh  # Android SDK setup
 │   │   └── optional/          # Optional terminal tools
-│   └── desktop/               # Desktop application installers
-│       ├── app-*.sh           # Individual GUI applications
-│       ├── set-*.sh           # Desktop environment settings
+│   └── desktop/               # Desktop application installers (ordered by prefix)
+│       ├── 00_fonts.sh        # Fonts
+│       ├── 10_set-gnome-settings.sh    # GNOME settings
+│       ├── 10_set-gnome-theme.sh       # GNOME theme
+│       ├── 20_vscode.sh       # VS Code
+│       ├── 40_set-dock.sh     # Dock configuration
 │       └── optional/          # Optional desktop applications
 └── configs/                   # Configuration files
-    ├── bashrc                 # Main bashrc file
-    ├── bash/                  # Bash configuration modules
-    │   ├── aliases            # Command aliases
-    │   ├── functions          # Shell functions
-    │   ├── prompt             # Custom prompt
-    │   └── rc                 # Main bash runtime config
-    ├── vscode.json            # VS Code settings
-    ├── neovim/                # Neovim configurations
-    ├── theme/                 # Theme files and settings
-    └── xkb/                   # Custom keyboard layouts
+   ├── bashrc                 # Main bashrc file
+   ├── btop.conf              # btop configuration
+   ├── inputrc                # Readline configuration
+   ├── vimrc                  # Vim configuration
+   ├── vscode.json            # VS Code settings
+   ├── bash/                  # Bash configuration modules
+   │   ├── aliases            # Command aliases
+   │   ├── functions          # Shell functions
+   │   ├── init               # Initialization snippets
+   │   ├── prompt             # Custom prompt
+   │   ├── rc                 # Main bash runtime config
+   │   └── shell              # Shell-specific settings
+   ├── capstoesc/             # Caps-to-Esc config + service
+   ├── icons/                 # Icons and assets
+   ├── neovim/                # Neovim configurations
+   ├── theme/                 # Theme files and settings
+   └── xkb/                   # Custom keyboard layouts
 ```
 
 ## Installation Flow
@@ -63,43 +73,43 @@ omakub-blade/
 
 1. **Remote Bootstrap** (recommended):
    ```bash
-   curl -L https://raw.githubusercontent.com/bladecoder/omakub-blade/main/boot.sh | bash
+   curl -L https://raw.githubusercontent.com/bladecoder/ubuntu-setup/main/bootstrap.sh | bash
    ```
    - Downloads repository as ZIP
-   - Extracts to `/tmp/omakase-ubuntu-setup-main`
-   - Runs `install.sh`
+   - Extracts to a temp folder
+   - Runs `setup.sh`
 
 2. **Local Installation**:
    ```bash
-   git clone https://github.com/bladecoder/omakub-blade.git
-   cd omakub-blade
-   ./install.sh
+   git clone https://github.com/bladecoder/ubuntu-setup.git
+   cd ubuntu-setup
+   ./setup.sh
    ```
 
 ### Installation Process
 
-1. **Validation** (`install/check-version.sh`):
+1. **Validation** (`scripts/check-version.sh`):
    - Verifies Ubuntu 25.10+
    - Checks x86 architecture
    - Exits if requirements not met
 
-2. **Pre-requisites** (`install/required.sh`):
+2. **Pre-requisites** (`scripts/required.sh`):
    - Installs base dependencies
 
-3. **User Setup** (`install/identification.sh`):
+3. **User Setup** (`scripts/identification.sh`):
    - Configures user identity
 
 4. **Environment Detection**:
    - If GNOME/Unity: Installs terminal + desktop tools
    - Otherwise: Installs terminal tools only
 
-5. **Terminal Installation** (`install/terminal.sh`):
-   - Executes all scripts in `install/terminal/*.sh`
-   - Order matters: `a-shell.sh` runs first (alphabetically)
+5. **Terminal Installation** (`scripts/terminal.sh`):
+   - Executes all scripts in `scripts/terminal/*.sh`
+   - Order matters: numeric prefixes determine execution order
 
-6. **Desktop Installation** (`install/desktop.sh`) [GNOME only]:
+6. **Desktop Installation** (`scripts/desktop.sh`) [GNOME only]:
    - Disables screen lock/sleep during installation
-   - Executes all scripts in `install/desktop/*.sh`
+   - Executes all scripts in `scripts/desktop/*.sh`
    - Re-enables screen lock/sleep
    - Prompts for reboot
 
@@ -163,7 +173,7 @@ omakub-blade/
 
 ### Optional Components
 
-Located in `install/*/optional/` directories:
+Located in `scripts/*/optional/` directories:
 
 **Terminal**:
 - Ollama (local LLM runtime)
@@ -183,11 +193,11 @@ Located in `install/*/optional/` directories:
 
 ### Bash Configuration
 
-**Main entry**: `~/.bashrc` (from `configs/bashrc`)
-- Sources `~/.local/share/bash/rc`
-- User customizations go in `~/.bashrc`
+**Main entry**: `$HOME/.bashrc` (from `configs/bashrc`)
+- Sources `$HOME/.local/share/bash/rc`
+- User customizations go in `$HOME/.bashrc`
 
-**Modular configs** in `~/.local/share/bash/`:
+**Modular configs** in `$HOME/.local/share/bash/`:
 - `aliases`: Command shortcuts and overrides
 - `functions`: Shell functions (e.g., `web2app`)
 - `prompt`: Custom bash prompt
@@ -203,12 +213,12 @@ Located in `install/*/optional/` directories:
 
 ### VS Code Configuration
 
-Location: `~/.config/Code/User/settings.json` (from `configs/vscode.json`)
+Location: `$HOME/.config/Code/User/settings.json` (from `configs/vscode.json`)
 - Automatically installed Tokyo Night theme
 
 ### Neovim Configuration
 
-Location: `~/.config/nvim/`
+Location: `$HOME/.config/nvim/`
 - LazyVim-based setup
 - Custom transparency settings
 - Animated scrolling disabled
@@ -229,8 +239,8 @@ Location: `~/.config/nvim/`
 
 ## Script Naming Convention
 
-- `a-*.sh`: Runs first (alphabetical order)
-- `app-*.sh`: Application installation
+- `NN_*.sh`: Ordered execution by numeric prefix (e.g., `00_`, `10_`, `20_`)
+- `app-*.sh`: Application installation (commonly under `optional/`)
 - `set-*.sh`: System/configuration setup
 - `install-*.sh`: Meta-installation scripts
 
@@ -239,8 +249,8 @@ Location: `~/.config/nvim/`
 Scripts can be run individually from the project root:
 
 ```bash
-cd omakub-blade
-source install/desktop/optional/app-slack.sh
+cd ubuntu-setup
+source scripts/desktop/optional/app-slack.sh
 ```
 
 **Important**: Use `source` to run scripts in the current shell context.
@@ -249,7 +259,7 @@ source install/desktop/optional/app-slack.sh
 
 ### Adding New Applications
 
-1. Create `install/terminal/app-yourapp.sh` or `install/desktop/app-yourapp.sh`
+1. Create `scripts/terminal/app-yourapp.sh` or `scripts/desktop/app-yourapp.sh`
 2. Include installation logic:
    ```bash
    #!/bin/bash
@@ -258,7 +268,7 @@ source install/desktop/optional/app-slack.sh
    # Install package
    # Copy configurations
    ```
-3. Make executable: `chmod +x install/*/app-yourapp.sh`
+3. Make executable: `chmod +x scripts/*/app-yourapp.sh`
 4. Script will auto-run on next full installation
 
 ### Adding Configurations
@@ -269,7 +279,7 @@ source install/desktop/optional/app-slack.sh
 
 ### Adding Optional Components
 
-1. Place in `install/*/optional/` directory
+1. Place in `scripts/*/optional/` directory
 2. Won't run automatically during full install
 3. User can run manually when needed
 
@@ -278,7 +288,7 @@ source install/desktop/optional/app-slack.sh
 ### Adding a New Application
 
 1. Determine if terminal or desktop application
-2. Create appropriately named script in `install/terminal/` or `install/desktop/`
+2. Create appropriately named script in `scripts/terminal/` or `scripts/desktop/`
 3. Include error handling: `set -e` for failing fast
 4. Test installation steps
 5. Add any configuration files to `configs/`
@@ -292,12 +302,12 @@ source install/desktop/optional/app-slack.sh
 ### Updating Theme
 
 1. Modify files in `configs/theme/`
-2. Update `install/desktop/set-gnome-theme.sh` if needed
+2. Update `scripts/desktop/10_set-gnome-theme.sh` if needed
 3. Ensure color scheme consistency
 
 ### Troubleshooting Installation
 
-1. Check `~/omakub-blade.log` if using recommended install method
+1. Check `$HOME/ubuntu-setup.log` if using recommended install method
 2. Verify Ubuntu version: `lsb_release -a`
 3. Ensure internet connectivity
 4. Check if script has execute permissions
@@ -310,7 +320,7 @@ source install/desktop/optional/app-slack.sh
 - **Backup Strategy**: Existing configs are backed up with `.bak` extension
 - **User Context**: Scripts run as regular user, use `sudo` when needed
 - **Shell Context**: Desktop installation prompts for reboot at end
-- **Logging**: Redirect to log file for debugging: `./install.sh 2>&1 | tee ~/omakub-blade.log`
+- **Logging**: Redirect to log file for debugging: `./setup.sh 2>&1 | tee $HOME/ubuntu-setup.log`
 
 ## Key Technologies
 
@@ -324,16 +334,16 @@ source install/desktop/optional/app-slack.sh
 
 ## Customization Philosophy
 
-Omakub Blade is opinionated but extensible:
+Ubuntu Setup is opinionated but extensible:
 - Core tools in main installation
 - Optional tools in `optional/` directories
-- User overrides in `~/.bashrc` and similar config files
+- User overrides in `$HOME/.bashrc` and similar config files
 - Fork-friendly: Encouraged to create your own variant
 
 ## References
 
 - Original Project: [Omakub by Basecamp](https://github.com/basecamp/omakub)
-- Repository: https://github.com/bladecoder/omakub-blade
+- Repository: https://github.com/bladecoder/ubuntu-setup
 - Maintainer: @bladecoder
 
 ---

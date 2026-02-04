@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Ensure git settings live under ~/.config
-mkdir -p ~/.config/git
-touch ~/.config/git/config
+# Ensure git settings live under $HOME/.config
+mkdir -p $HOME/.config/git
+touch $HOME/.config/git/config
 
 # Set common git aliases
 git config --global alias.co checkout
@@ -15,8 +15,8 @@ git config --global alias.last "log -1 HEAD --stat"
 git config --global alias.change-commits "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [[ \\\"$`echo $VAR`\\\" = '$OLD' ]]; then export $VAR='$NEW'; fi\" $@; }; f"
 
 
-git config --global push.autoSetupRemote true 
-git config --global push.default current 
+git config --global push.autoSetupRemote true
+git config --global push.default current
 git config --global init.defaultBranch main
 git config --global pull.rebase true
 

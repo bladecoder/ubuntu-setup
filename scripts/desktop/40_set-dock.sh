@@ -3,10 +3,10 @@
 # Favorite apps for dock
 apps=(
 	"google-chrome.desktop"
-	"org.gnome.Terminal.desktop"
+	"org.gnome.Ptyxis.desktop"
 	"org.gnome.Nautilus.desktop"
 	"code.desktop"
-	"jetbrains-idea-ce-0c0497e4-af93-41a0-9423-ee76ffbf4a74.desktop"
+	"intellij-idea-community_intellij-idea-community.desktop"
 )
 
 # Array to hold installed favorite apps

@@ -8,8 +8,8 @@ rm -f /tmp/packages.microsoft.gpg
 sudo apt update -y
 sudo apt install -y code
 
-mkdir -p ~/.config/Code/User
-cp ./configs/vscode.json ~/.config/Code/User/settings.json
+mkdir -p $HOME/.config/Code/User
+cp ./configs/vscode.json $HOME/.config/Code/User/settings.json
 
 # Install default supported themes
 code --install-extension enkia.tokyo-night
