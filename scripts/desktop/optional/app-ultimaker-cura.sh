@@ -1,14 +1,24 @@
 #!/bin/bash
+set -euo pipefail
 
-APP_VERSION=$(curl -s "https://api.github.com/repos/Ultimaker/Cura/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
-curl -sLo $HOME/apps/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage "https://github.com/Ultimaker/Cura/releases/download/${APP_VERSION}/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage"
-chmod +x $HOME/apps/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage
+APP_VERSION="$(
+  curl -fsSL "https://api.github.com/repos/Ultimaker/Cura/releases/latest" \
+    | grep -Po '"tag_name": "\K[^"]*' \
+    || true
+)"
+[ -n "$APP_VERSION" ] || { echo "Unable to resolve Ultimaker Cura version"; exit 1; }
+
+mkdir -p "$HOME/apps"
+APP_PATH="$HOME/apps/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage"
+curl -fsSL -o "$APP_PATH" "https://github.com/Ultimaker/Cura/releases/download/${APP_VERSION}/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage"
+[ -s "$APP_PATH" ] || { echo "Ultimaker Cura download failed"; exit 1; }
+chmod +x "$APP_PATH"
 
 # Create desktop entry
 APP_NAME="Ultimaker Cura"
-APP_PATH="$HOME/apps/UltiMaker-Cura-${APP_VERSION}-linux-X64.AppImage"
 #ICON_PATH="$HOME/apps/thelastline/lib/thelastline.png"
 DESKTOP_FILE="$HOME/.local/share/applications/${APP_NAME}.desktop"
+mkdir -p "$HOME/.local/share/applications"
 
 cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]

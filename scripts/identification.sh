@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 echo -e "\n\033[35mEnter identification for git and autocomplete...\033[0m\n"
 SYSTEM_NAME=$(getent passwd "$USER" | cut -d ':' -f 5 | cut -d ',' -f 1)

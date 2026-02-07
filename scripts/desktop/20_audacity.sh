@@ -1,3 +1,4 @@
 #!/bin/bash
+set -euo pipefail
 
-apt install -y audacity
+sudo apt install -y audacity

@@ -38,7 +38,7 @@ git clone https://github.com/bladecoder/ubuntu-setup.git && cd ubuntu-setup
 
 ## Running Individual Install Scripts
 
-Each script inside the `install` directory can be run separately to install specific tools or applications. Make sure to execute the script from the project root. For example:
+Each script inside the `scripts` directory can be run separately to install specific tools or applications. Make sure to execute the script from the project root. For example:
 
 ```
 ubuntu-setup > source scripts/desktop/optional/app-slack.sh

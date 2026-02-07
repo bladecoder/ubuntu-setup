@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if [ ! -f /etc/os-release ]; then
   echo "$(tput setaf 1)Error: Unable to determine OS. /etc/os-release file not found."
@@ -9,7 +10,7 @@ fi
 . /etc/os-release
 
 # Check if running on Ubuntu 25.10 or higher
-if [ "$ID" != "ubuntu" ] || [ $(echo "$VERSION_ID >= 25.10" | bc) != 1 ]; then
+if [ "$ID" != "ubuntu" ] || ! dpkg --compare-versions "$VERSION_ID" ge "25.10"; then
   echo "$(tput setaf 1)Error: OS requirement not met"
   echo "You are currently running: $ID $VERSION_ID"
   echo "OS required: Ubuntu 25.10 or higher"

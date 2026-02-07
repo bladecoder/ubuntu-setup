@@ -26,4 +26,4 @@ rm -rf "${WORKDIR}"
 git clone --depth 1 "${REPO_URL}" "${WORKDIR}"
 
 cd "${WORKDIR}"
-sh ./setup.sh
+bash ./setup.sh

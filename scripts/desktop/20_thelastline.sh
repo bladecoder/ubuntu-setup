@@ -1,10 +1,19 @@
 #!/bin/bash
+set -euo pipefail
 
-APP_VERSION=$(curl -s "https://api.github.com/repos/bladecoder/thelastline/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -sLo /tmp/thelastline.tar.gz "https://github.com/bladecoder/thelastline/releases/download/v${APP_VERSION}/thelastline-v${APP_VERSION}-x86_64-linux.tar.gz"
+APP_VERSION="$(
+  curl -fsSL "https://api.github.com/repos/bladecoder/thelastline/releases/latest" \
+    | grep -Po '"tag_name": "v\K[^"]*' \
+    || true
+)"
+[ -n "$APP_VERSION" ] || { echo "Unable to resolve The Last Line version"; exit 1; }
+curl -fsSL -o /tmp/thelastline.tar.gz "https://github.com/bladecoder/thelastline/releases/download/v${APP_VERSION}/thelastline-v${APP_VERSION}-x86_64-linux.tar.gz"
 tar -xzf /tmp/thelastline.tar.gz -C /tmp
-mkdir -p $HOME/apps
-mv /tmp/thelastline-v${APP_VERSION}-x86_64-linux/thelastline $HOME/apps/
+mkdir -p "$HOME/apps"
+rm -rf "$HOME/apps/thelastline"
+mv "/tmp/thelastline-v${APP_VERSION}-x86_64-linux/thelastline" "$HOME/apps/"
+rm -f /tmp/thelastline.tar.gz
+mkdir -p "$HOME/.local/share/applications"
 
 # Create desktop entry
 APP_NAME="The Last Line"
