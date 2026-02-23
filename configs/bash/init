@@ -18,7 +18,8 @@ export EDITOR="vim"
 export SUDO_EDITOR="$EDITOR"
 export BAT_THEME=ansi
 
-export GIT_HOME=$HOME/git
+export PROJECTS_DIR=$HOME/Projects
+export GIT_HOME=$PROJECTS_DIR
 
 if [ -d "$HOME/apps/android-sdk" ]; then
   export ANDROID_HOME=$HOME/apps/android-sdk
