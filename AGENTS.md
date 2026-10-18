@@ -60,7 +60,7 @@ ubuntu-setup/
    │   ├── prompt             # Custom prompt
    │   ├── rc                 # Main bash runtime config
    │   └── shell              # Shell-specific settings
-   ├── capstoesc/             # Caps-to-Esc config + service
+   ├── keyd/                  # Caps-to-Esc/Ctrl remapping config
    ├── icons/                 # Icons and assets
    ├── neovim/                # Neovim configurations
    ├── theme/                 # Theme files and settings
@@ -137,7 +137,7 @@ ubuntu-setup/
 - fastfetch (system info)
 
 **System Enhancements**:
-- Caps Lock → Escape remapping
+- Caps Lock → Escape on tap / Control in combinations via keyd (BM40 excluded)
 - Custom "Spanglish" keyboard layout
 - Mouse lag fix
 - Android SDK support

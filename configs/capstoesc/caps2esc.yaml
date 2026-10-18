@@ -1,9 +1,0 @@
-- JOB: "interception -g $DEVNODE | uinput -d $DEVNODE"
-  DEVICE:
-    EVENTS:
-      EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
-    LINK: /dev/input/by-id/usb-KPRepublic_BM40_Hotswap_RGB-event-kbd
-- JOB: "interception -g $DEVNODE | caps2esc | uinput -d $DEVNODE"
-  DEVICE:
-    EVENTS:
-      EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
